@@ -1,8 +1,8 @@
-import { Box, IconButton, Stack, Typography } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import AddIcon from '@mui/icons-material/Add';
-import { grey } from '@mui/material/colors';
 import { Category, Task, categories, tasks } from '@/data/tasks';
+import AddIcon from '@mui/icons-material/Add';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 export const Categories = () => {
   return (

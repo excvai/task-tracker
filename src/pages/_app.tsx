@@ -5,10 +5,11 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 
-export default function App({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
@@ -24,3 +25,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </>
   );
 }
+export default appWithTranslation(App);

@@ -1,17 +1,21 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
+import { users } from '@/data/users';
+import { updateUser } from '@/store/auth';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
+import { Alert } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
 import Container from '@mui/material/Container';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { default as NextLink } from 'next/link';
+import { useRouter } from 'next/router';
+import * as React from 'react';
 
 function Copyright(props: any) {
   return (
@@ -22,7 +26,12 @@ function Copyright(props: any) {
       {...props}
     >
       {'Copyright © '}
-      <Link color='inherit' href='/'>
+      <Link
+        component={NextLink}
+        color='inherit'
+        href='/'
+        sx={{ cursor: 'pointer' }}
+      >
         Goalify
       </Link>{' '}
       {new Date().getFullYear()}
@@ -35,19 +44,36 @@ function Copyright(props: any) {
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const router = useRouter();
+
+  const [error, setError] = React.useState('');
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+
+    const user = users.find((u) => u.email === email);
+    if (user) {
+      if (user.password === password) {
+        updateUser(user);
+        router.push('/');
+      } else {
+        setError('Wrong password');
+      }
+    } else {
+      setError('User not found');
+    }
     console.log({
-      email: data.get('email'),
-      password: data.get('password'),
+      email,
+      password,
     });
   };
 
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component='main' maxWidth='xs'>
-        <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
@@ -112,6 +138,16 @@ export default function SignIn() {
                 </Link>
               </Grid>
             </Grid>
+            {error && (
+              <Alert
+                severity='error'
+                sx={{
+                  mt: 2,
+                }}
+              >
+                {error}
+              </Alert>
+            )}
           </Box>
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />

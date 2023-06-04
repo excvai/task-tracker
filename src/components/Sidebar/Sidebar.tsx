@@ -1,18 +1,23 @@
+import { $user, updateUser } from '@/store/auth';
 import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
 import HistoryIcon from '@mui/icons-material/History';
-import TelegramIcon from '@mui/icons-material/Telegram';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import TelegramIcon from '@mui/icons-material/Telegram';
 import { Box, Button, Grid, Stack, Tooltip, Typography } from '@mui/material';
-import Image from 'next/image';
-import DefaultAvatar from '/public/images/avatar.jpg';
-import UnearnedAchievement from '/public/images/achievement-unearned2x.png';
-import PerfectAchievement from '/public/images/achievement-perfect2x.png';
-import CreatedTaskAchievement from '/public/images/achievement-createdTask2x.png';
-import CompletedTaskAchievement from '/public/images/achievement-completedTask2x.png';
 import { green } from '@mui/material/colors';
+import { useStore } from 'effector-react';
+import Image from 'next/image';
+import { default as NextLink } from 'next/link';
+import CompletedTaskAchievement from '/public/images/achievement-completedTask2x.png';
+import CreatedTaskAchievement from '/public/images/achievement-createdTask2x.png';
+import PerfectAchievement from '/public/images/achievement-perfect2x.png';
+import UnearnedAchievement from '/public/images/achievement-unearned2x.png';
+import DefaultAvatar from '/public/images/avatar.jpg';
 
 export const Sidebar = () => {
+  const user = useStore($user)!;
+
   return (
     <Stack
       textAlign='center'
@@ -38,7 +43,7 @@ export const Sidebar = () => {
           borderRadius={4}
         />
         <Typography fontWeight={600} variant='h6'>
-          Nickname
+          {user.nickname}
         </Typography>
         <Typography variant='body2' fontStyle='italic' fontWeight={300}>
           1 lvl
@@ -56,9 +61,9 @@ export const Sidebar = () => {
         alignSelf='flex-start'
         width={1}
         sx={{
-          button: {
+          '> button, a': {
             justifyContent: 'flex-start',
-            textTransform: 'none'
+            textTransform: 'none',
           },
         }}
       >
@@ -89,6 +94,8 @@ export const Sidebar = () => {
           <Typography ml={1}>Notifications</Typography>
         </Button>
         <Button
+          component={NextLink}
+          href='mailto:vladyslav.katrych.main@gmail.com'
           variant='contained'
           color='inherit'
           sx={{ color: 'text.primary' }}
@@ -189,7 +196,14 @@ export const Sidebar = () => {
       </Box>
 
       <Box mt='auto' borderTop='2px solid rgba(204, 204, 204, 0.596)'>
-        <Button color='inherit'>Logout</Button>
+        <Button
+          color='inherit'
+          onClick={() => {
+            updateUser(null);
+          }}
+        >
+          Logout
+        </Button>
       </Box>
     </Stack>
   );

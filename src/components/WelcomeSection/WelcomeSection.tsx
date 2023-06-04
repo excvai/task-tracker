@@ -1,8 +1,6 @@
+import { GBIcon, UAIcon } from '@/icons/countries';
 import FlagCircleIcon from '@mui/icons-material/FlagCircle';
-import { default as NextLink } from 'next/link';
 import {
-  Avatar,
-  Box,
   Button,
   Container,
   Divider,
@@ -14,10 +12,14 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import { useTranslation } from 'next-i18next';
+import { default as NextLink } from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { GBIcon, UAIcon } from '@/icons/countries';
 
 export const WelcomeSection = () => {
+  const { t } = useTranslation();
+
   return (
     <Stack component='main' minHeight='100vh'>
       {/* Header */}
@@ -42,17 +44,17 @@ export const WelcomeSection = () => {
             <Typography variant='h5'>Goalify</Typography>
           </Stack>
           <Stack direction='row' gap={6} alignItems='center'>
-            <LanguageMenu />
             <Link
               color='text.secondary'
               href='mailto:vladyslav.katrych.main@gmail.com'
             >
-              Contact Us
+              {t('contactUs')}
             </Link>
-            <Link>Sign Up</Link>
+            <Link>{t('signup')}</Link>
             <Link component={NextLink} href='/signin'>
-              Sign In
+              {t('signin')}
             </Link>
+            <LanguageMenu />
           </Stack>
         </Stack>
       </Container>
@@ -72,12 +74,17 @@ export const WelcomeSection = () => {
         }}
       >
         <Stack component={Container} gap={4} alignItems='center'>
-          <Typography variant='h2' maxWidth={530} fontWeight={700}>
-            Build Your Habits, Reach your Goal!
+          <Typography
+            variant='h2'
+            fontWeight={700}
+            sx={{
+              whiteSpace: 'pre-wrap',
+            }}
+          >
+            {t('title')}
           </Typography>
           <Typography maxWidth={658} variant='h5' color='text.secondary'>
-            Focus on what truly matters with Goalify. Build the best version of
-            yourself by achieving your goals.
+            {t('subtitle')}
           </Typography>
           <Button
             variant='contained'
@@ -85,7 +92,7 @@ export const WelcomeSection = () => {
             component={NextLink}
             href='/signin'
           >
-            Get Started
+            {t('button')}
           </Button>
         </Stack>
       </Stack>
@@ -94,6 +101,9 @@ export const WelcomeSection = () => {
 };
 
 const LanguageMenu = () => {
+  const { i18n } = useTranslation();
+  const router = useRouter();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -107,12 +117,11 @@ const LanguageMenu = () => {
     <>
       <IconButton
         onClick={handleClick}
-        sx={{ ml: 2 }}
-        aria-controls={open ? 'account-menu' : undefined}
+        aria-controls={open ? 'language-menu' : undefined}
         aria-haspopup='true'
         aria-expanded={open ? 'true' : undefined}
       >
-        <GBIcon />
+        {i18n.language === 'en' ? <GBIcon /> : <UAIcon />}
       </IconButton>
 
       <Menu
@@ -150,14 +159,30 @@ const LanguageMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          component={NextLink}
+          href={{
+            pathname: router.pathname,
+            query: router.query,
+          }}
+          locale='en'
+          onClick={handleClose}
+        >
           <ListItemIcon>
             <GBIcon />
           </ListItemIcon>
           English
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
+        <MenuItem
+          component={NextLink}
+          href={{
+            pathname: router.pathname,
+            query: router.query,
+          }}
+          locale='ua'
+          onClick={handleClose}
+        >
           <ListItemIcon>
             <UAIcon />
           </ListItemIcon>

@@ -11,6 +11,16 @@ export const theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      defaultProps: {
+        underline: 'hover',
+      },
+      styleOverrides: {
+        root: {
+          cursor: 'pointer',
+        },
+      },
+    },
     MuiTooltip: {
       defaultProps: {
         placement: 'top',
@@ -22,9 +32,9 @@ export const theme = createTheme({
           backgroundColor: grey[800],
         },
         tooltipPlacementTop: {
-          marginBottom: '0 !important'
-        }
-      }
+          marginBottom: '0 !important',
+        },
+      },
     },
   },
 });

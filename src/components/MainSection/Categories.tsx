@@ -29,6 +29,31 @@ export const Categories = () => {
           />
         );
       })}
+
+      <AddNewCategory />
+    </Stack>
+  );
+};
+
+const AddNewCategory = () => {
+  return (
+    <Stack
+      direction='row'
+      gap={1}
+      bgcolor={grey[600]}
+      width={272}
+      px={1}
+      py='12px'
+      borderRadius={4}
+      sx={{
+        cursor: 'pointer',
+        ':hover': {
+          bgcolor: grey[700],
+        },
+      }}
+    >
+      <AddIcon />
+      <Typography>Add another category</Typography>
     </Stack>
   );
 };

@@ -9,6 +9,9 @@ export const theme = createTheme({
           display: 'block',
           verticalAlign: 'middle',
         },
+        'a': {
+          all: 'unset'
+        }
       },
     },
     MuiLink: {

@@ -1,4 +1,8 @@
 import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
+import HistoryIcon from '@mui/icons-material/History';
+import TelegramIcon from '@mui/icons-material/Telegram';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import { Box, Button, Grid, Stack, Tooltip, Typography } from '@mui/material';
 import Image from 'next/image';
 import DefaultAvatar from '/public/images/avatar.jpg';
@@ -33,7 +37,9 @@ export const Sidebar = () => {
           border='1px solid #ccc'
           borderRadius={4}
         />
-        <Typography fontWeight={600} variant='h6'>Nickname</Typography>
+        <Typography fontWeight={600} variant='h6'>
+          Nickname
+        </Typography>
         <Typography variant='body2' fontStyle='italic' fontWeight={300}>
           1 lvl
         </Typography>
@@ -45,12 +51,52 @@ export const Sidebar = () => {
         </Box>
       </Stack>
 
-      <Stack gap={1} alignSelf='flex-start' width={1}>
-        <Button variant='contained' fullWidth>Check history</Button>
-        <Button variant='contained' fullWidth>Stats</Button>
-        <Button variant='contained' fullWidth>Stats</Button>
-        <Button variant='contained' fullWidth>Stats</Button>
-        <Button variant='contained' fullWidth>Stats</Button>
+      <Stack
+        gap={1}
+        alignSelf='flex-start'
+        width={1}
+        sx={{
+          button: {
+            justifyContent: 'flex-start',
+            textTransform: 'none'
+          },
+        }}
+      >
+        <Button
+          variant='contained'
+          color='inherit'
+          sx={{ color: 'text.primary' }}
+          fullWidth
+        >
+          <HistoryIcon /> <Typography ml={1}>Check history</Typography>
+        </Button>
+        <Button
+          variant='contained'
+          color='inherit'
+          sx={{ color: 'text.primary' }}
+          fullWidth
+        >
+          <TelegramIcon />
+          <Typography ml={1}>Connect Telegram</Typography>
+        </Button>
+        <Button
+          variant='contained'
+          color='inherit'
+          sx={{ color: 'text.primary' }}
+          fullWidth
+        >
+          <NotificationsActiveIcon />
+          <Typography ml={1}>Notifications</Typography>
+        </Button>
+        <Button
+          variant='contained'
+          color='inherit'
+          sx={{ color: 'text.primary' }}
+          fullWidth
+        >
+          <SupportAgentIcon />
+          <Typography ml={1}>Support</Typography>
+        </Button>
       </Stack>
 
       <Box width={1}>
@@ -82,16 +128,14 @@ export const Sidebar = () => {
           <Tooltip
             title={
               <Box textAlign='center' py={2} px={1}>
-                <Typography
-                  variant='h6'
-                  fontWeight={600}
-                >
+                <Typography variant='h6' fontWeight={600}>
                   Perfect Day
                 </Typography>
                 <Typography>
                   Completed all active Dailies in one day. With this achievement
                   you get a +level/2 buff to all Stats for the next day. Levels
-                  greater than 100 don&apos;t have any additional effects on buffs.
+                  greater than 100 don&apos;t have any additional effects on
+                  buffs.
                 </Typography>
               </Box>
             }

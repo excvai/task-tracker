@@ -14,9 +14,12 @@ import CreatedTaskAchievement from '/public/images/achievement-createdTask2x.png
 import PerfectAchievement from '/public/images/achievement-perfect2x.png';
 import UnearnedAchievement from '/public/images/achievement-unearned2x.png';
 import DefaultAvatar from '/public/images/avatar.jpg';
+import { StarIcon } from '@/icons/common';
 
 export const Sidebar = () => {
   const user = useStore($user)!;
+
+  const experience = 76.5;
 
   return (
     <Stack
@@ -31,7 +34,7 @@ export const Sidebar = () => {
         backgroundImage: 'linear-gradient(315deg, #7a7676 0%, #576574 74%)',
       }}
     >
-      <Stack alignItems='center' gap={0.5}>
+      <Stack alignItems='center'>
         <Box
           component={Image}
           src={DefaultAvatar}
@@ -42,17 +45,48 @@ export const Sidebar = () => {
           border='1px solid #ccc'
           borderRadius={4}
         />
-        <Typography fontWeight={600} variant='h6'>
+        <Typography fontWeight={600} variant='h6' pt={0.5}>
           {user.nickname}
         </Typography>
-        <Typography variant='body2' fontStyle='italic' fontWeight={300}>
-          1 lvl
-        </Typography>
-        <Box>
-          <Typography variant='body2' fontStyle='italic' fontWeight={300}>
-            0.00%
+        <Box
+          display='flex'
+          justifyContent='center'
+          alignItems='center'
+          gap={0.5}
+        >
+          <StarIcon fontSize='small' />
+          <Typography variant='body2' fontStyle='italic' fontWeight={400}>
+            3 lvl
           </Typography>
-          <Box height={2} bgcolor={green[400]} width={100} />
+        </Box>
+        <Box mt={0.5}>
+          <Typography variant='body2' fontStyle='italic' fontWeight={300}>
+            {experience}%
+          </Typography>
+          <Box
+            position='relative'
+            width={100}
+            height={5}
+            borderRadius={2}
+            overflow='hidden'
+          >
+            <Box
+              bgcolor={green[400]}
+              width={1}
+              position='absolute'
+              top={0}
+              bottom={0}
+              left={0}
+            />
+            <Box
+              bgcolor={green[800]}
+              width={experience + '%'}
+              position='absolute'
+              top={0}
+              bottom={0}
+              left={0}
+            />
+          </Box>
         </Box>
       </Stack>
 
@@ -154,28 +188,50 @@ export const Sidebar = () => {
               <Typography>Perfect Day</Typography>
             </Grid>
           </Tooltip>
-          <Grid
-            item
-            xs={6}
-            display='flex'
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='center'
+          <Tooltip
+            title={
+              <Box textAlign='center' py={2} px={1}>
+                <Typography variant='h6' fontWeight={600}>
+                  Create Task
+                </Typography>
+                <Typography>Created your first task.</Typography>
+              </Box>
+            }
           >
-            <Image src={CreatedTaskAchievement} alt='Unearned' />
-            <Typography>Create Task</Typography>
-          </Grid>
-          <Grid
-            item
-            xs={6}
-            display='flex'
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='center'
+            <Grid
+              item
+              xs={6}
+              display='flex'
+              flexDirection='column'
+              justifyContent='center'
+              alignItems='center'
+            >
+              <Image src={CreatedTaskAchievement} alt='Unearned' />
+              <Typography>Create Task</Typography>
+            </Grid>
+          </Tooltip>
+          <Tooltip
+            title={
+              <Box textAlign='center' py={2} px={1}>
+                <Typography variant='h6' fontWeight={600}>
+                  Complete task
+                </Typography>
+                <Typography>Completed your first task.</Typography>
+              </Box>
+            }
           >
-            <Image src={CompletedTaskAchievement} alt='Unearned' />
-            <Typography>Complete Task</Typography>
-          </Grid>
+            <Grid
+              item
+              xs={6}
+              display='flex'
+              flexDirection='column'
+              justifyContent='center'
+              alignItems='center'
+            >
+              <Image src={CompletedTaskAchievement} alt='Unearned' />
+              <Typography>Complete Task</Typography>
+            </Grid>
+          </Tooltip>
           <Grid
             item
             xs={6}

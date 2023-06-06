@@ -1,7 +1,7 @@
 import { users } from '@/data/users';
 import { updateUser } from '@/store/auth';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Alert } from '@mui/material';
+import { Alert, Divider, Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -73,16 +73,20 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Container component='main' maxWidth='xs'>
-        <Box
+      <Stack component='main' minHeight='100vh' justifyContent='center'>
+        <Container
+          maxWidth='xs'
           sx={{
-            marginTop: 8,
+            flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
+            // justifyContent: 'center',
             alignItems: 'center',
+            mt: '12%',
+            mb: 4,
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: '#172B4D' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
@@ -149,9 +153,10 @@ export default function SignIn() {
               </Alert>
             )}
           </Box>
-        </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
-      </Container>
+        </Container>
+        <Divider />
+        <Copyright sx={{ py: 2 }} />
+      </Stack>
     </ThemeProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { Task, categories } from '@/data/tasks';
 import CloseIcon from '@mui/icons-material/Close';
-import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
+import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
 import GridViewIcon from '@mui/icons-material/GridView';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import StarsOutlinedIcon from '@mui/icons-material/StarsOutlined';
@@ -12,15 +12,15 @@ import {
   Chip,
   Grid,
   IconButton,
-  MenuProps,
   Modal,
+  ModalProps,
   Rating,
   Stack,
   Tooltip,
   Typography,
 } from '@mui/material';
 
-interface TaskModalProps extends MenuProps {
+interface TaskModalProps extends Omit<ModalProps, 'children'> {
   task: Task;
 }
 

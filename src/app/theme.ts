@@ -1,6 +1,30 @@
 import { grey } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
+declare module '@mui/material/styles' {
+  interface Theme {}
+
+  interface ThemeOptions {}
+
+  interface Palette {
+    neutral: Palette['primary'];
+  }
+
+  interface PaletteOptions {
+    neutral: PaletteOptions['primary'];
+  }
+
+  interface PaletteColor {}
+
+  interface SimplePaletteColorOptions {}
+}
+
+declare module '@mui/material' {
+  interface ButtonPropsColorOverrides {
+    neutral: true;
+  }
+}
+
 export const theme = createTheme({
   components: {
     MuiCssBaseline: {
@@ -9,9 +33,9 @@ export const theme = createTheme({
           display: 'block',
           verticalAlign: 'middle',
         },
-        'a': {
-          all: 'unset'
-        }
+        a: {
+          all: 'unset',
+        },
       },
     },
     MuiLink: {
@@ -38,6 +62,14 @@ export const theme = createTheme({
           marginBottom: '0 !important',
         },
       },
+    },
+  },
+  palette: {
+    neutral: {
+      // main: '#64748B',
+      // contrastText: '#fff',
+      main: '#091E4224',
+      contrastText: '#172B4D',
     },
   },
 });

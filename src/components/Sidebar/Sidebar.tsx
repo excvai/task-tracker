@@ -1,7 +1,6 @@
 import { $user, updateUser } from '@/store/auth';
 import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
 import HistoryIcon from '@mui/icons-material/History';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import { Box, Button, Grid, Stack, Tooltip, Typography } from '@mui/material';
@@ -9,6 +8,7 @@ import { green } from '@mui/material/colors';
 import { useStore } from 'effector-react';
 import Image from 'next/image';
 import { default as NextLink } from 'next/link';
+import { Notifications } from './Notifications';
 import CompletedTaskAchievement from '/public/images/achievement-completedTask2x.png';
 import CreatedTaskAchievement from '/public/images/achievement-createdTask2x.png';
 import PerfectAchievement from '/public/images/achievement-perfect2x.png';
@@ -76,6 +76,9 @@ export const Sidebar = () => {
           <HistoryIcon /> <Typography ml={1}>Check history</Typography>
         </Button>
         <Button
+          component={NextLink}
+          href='https://t.me/GoalifyBot'
+          target='_blank'
           variant='contained'
           color='inherit'
           sx={{ color: 'text.primary' }}
@@ -84,15 +87,7 @@ export const Sidebar = () => {
           <TelegramIcon />
           <Typography ml={1}>Connect Telegram</Typography>
         </Button>
-        <Button
-          variant='contained'
-          color='inherit'
-          sx={{ color: 'text.primary' }}
-          fullWidth
-        >
-          <NotificationsActiveIcon />
-          <Typography ml={1}>Notifications</Typography>
-        </Button>
+        <Notifications />
         <Button
           component={NextLink}
           href='mailto:vladyslav.katrych.main@gmail.com'

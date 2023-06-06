@@ -3,6 +3,8 @@ import AddIcon from '@mui/icons-material/Add';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { useState } from 'react';
+import { TaskModal } from '../TaskModal';
 
 export const Categories = () => {
   return (
@@ -18,7 +20,9 @@ export const Categories = () => {
     >
       {categories.map((category) => {
         const relatedTasks = tasks.filter((t) =>
-          t.categories.includes(category.id)
+          Object.keys(t.categories)
+            .map((id) => Number(id))
+            .includes(category.id)
         );
 
         return (
@@ -118,20 +122,33 @@ const Category = ({
 };
 
 const Card = ({ task }: { task: Task }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Box
-      bgcolor='white'
-      borderRadius={1}
-      p={1}
-      sx={{
-        boxShadow: '0px 1px 1px #091E4240, 0px 0px 1px #091E424F',
-        cursor: 'pointer',
-        ':hover': {
-          bgcolor: grey[200],
-        },
-      }}
-    >
-      {task.name}
-    </Box>
+    <>
+      <Box
+        onClick={handleOpen}
+        bgcolor='white'
+        borderRadius={1}
+        p={1}
+        sx={{
+          boxShadow: '0px 1px 1px #091E4240, 0px 0px 1px #091E424F',
+          cursor: 'pointer',
+          ':hover': {
+            bgcolor: grey[200],
+          },
+        }}
+      >
+        {task.name}
+      </Box>
+
+      <TaskModal open={open} onClose={handleClose} task={task} />
+    </>
   );
 };

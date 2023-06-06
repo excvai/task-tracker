@@ -1,10 +1,32 @@
+import { Status, tasks } from '@/data/tasks';
+import { EventContentArg, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
 import { Box } from '@mui/material';
-
-const events = [{ title: 'Meeting', start: new Date() }];
+import { useMemo, useState } from 'react';
+import { TaskModal } from '../TaskModal';
 
 export const Calendar = () => {
+  const events = useMemo(() => {
+    const out: EventInput[] = [];
+    tasks.forEach((task) => {
+      Object.entries(task.days).forEach(([date, status]) => {
+        const bgColor: { [k in Status]: string } = {
+          none: 'white',
+          failed: 'red',
+          completed: 'green',
+        };
+
+        out.push({
+          title: task.name,
+          start: new Date(date),
+          backgroundColor: bgColor[status],
+        });
+      });
+    });
+    return out;
+  }, []);
+
   return (
     <Box
       flexGrow={1}
@@ -27,11 +49,29 @@ export const Calendar = () => {
   );
 };
 
-function renderEventContent(eventInfo: any) {
+const renderEventContent = (eventInfo: EventContentArg) => (
+  <MyComponent eventInfo={eventInfo} />
+);
+
+const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const task = tasks.find((t) => t.name === eventInfo.event.title)!;
+
   return (
     <>
-      <b>{eventInfo.timeText}</b>&nbsp;
-      <i>{eventInfo.event.title}</i>
+      <Box onClick={handleOpen} width={1} sx={{ cursor: 'pointer' }}>
+        <b>{eventInfo.timeText}</b>&nbsp;
+        <i>{eventInfo.event.title}</i>
+      </Box>
+
+      <TaskModal open={open} onClose={handleClose} task={task} />
     </>
   );
-}
+};

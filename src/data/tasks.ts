@@ -1,4 +1,4 @@
-type Status = 'none' | 'completed' | 'failed';
+export type Status = 'none' | 'completed' | 'failed';
 
 export interface Category {
   id: number;
@@ -20,10 +20,12 @@ export interface Task {
   id: number;
   name: string;
   description: string;
-  difficulty: 0 | 1 | 2 | 3 | 4 | 5;
-  categories: number[];
+  difficulty: null | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
+  categories: {
+    [cId: number]: Status;
+  };
   days: {
-    [k: string]: Status;
+    [day: string]: Status;
   };
 }
 
@@ -32,21 +34,26 @@ export const tasks: Task[] = [
     id: 1,
     name: 'Task 1',
     description: 'Very important first task',
-    difficulty: 3,
-    categories: [1, 2],
+    difficulty: 3.5,
+    categories: {
+      1: 'completed',
+      2: 'failed',
+    },
     days: {
-      '04.06.2023': 'completed',
+      '06/05/2023': 'completed',
     },
   },
   {
     id: 2,
     name: 'Task 2',
     description: 'Super ultra important second task!!!',
-    difficulty: 4,
-    categories: [2],
+    difficulty: null,
+    categories: {
+      2: 'completed',
+    },
     days: {
-      '03.06.2023': 'completed',
-      '05.06.2023': 'none',
+      '06/05/2023': 'completed',
+      '06/07/2023': 'none',
     },
   },
 ];

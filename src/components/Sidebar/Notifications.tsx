@@ -29,8 +29,7 @@ export const Notifications = () => {
       <Button
         onClick={handleOpen}
         variant='contained'
-        color='inherit'
-        sx={{ color: 'text.primary' }}
+        color='light'
         fullWidth
       >
         <NotificationsActiveIcon />

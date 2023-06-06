@@ -103,8 +103,7 @@ export const Sidebar = () => {
       >
         <Button
           variant='contained'
-          color='inherit'
-          sx={{ color: 'text.primary' }}
+          color='light'
           fullWidth
         >
           <HistoryIcon /> <Typography ml={1}>Check history</Typography>
@@ -114,8 +113,7 @@ export const Sidebar = () => {
           href='https://t.me/GoalifyBot'
           target='_blank'
           variant='contained'
-          color='inherit'
-          sx={{ color: 'text.primary' }}
+          color='light'
           fullWidth
         >
           <TelegramIcon />
@@ -126,8 +124,7 @@ export const Sidebar = () => {
           component={NextLink}
           href='mailto:vladyslav.katrych.main@gmail.com'
           variant='contained'
-          color='inherit'
-          sx={{ color: 'text.primary' }}
+          color='light'
           fullWidth
         >
           <SupportAgentIcon />

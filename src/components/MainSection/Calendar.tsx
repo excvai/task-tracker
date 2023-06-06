@@ -2,7 +2,7 @@ import { Status, tasks } from '@/data/tasks';
 import { EventContentArg, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import FullCalendar from '@fullcalendar/react';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useMemo, useState } from 'react';
 import { TaskModal } from '../TaskModal';
 
@@ -10,17 +10,17 @@ export const Calendar = () => {
   const events = useMemo(() => {
     const out: EventInput[] = [];
     tasks.forEach((task) => {
-      Object.entries(task.days).forEach(([date, status]) => {
+      Object.entries(task.days).forEach(([date, info]) => {
         const bgColor: { [k in Status]: string } = {
-          none: 'white',
-          failed: 'red',
-          completed: 'green',
+          none: 'light',
+          failed: 'error',
+          completed: 'success',
         };
 
         out.push({
           title: task.name,
-          start: new Date(date),
-          backgroundColor: bgColor[status],
+          start: new Date(date + '/' + info.time),
+          backgroundColor: bgColor[info.status],
         });
       });
     });
@@ -66,10 +66,25 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
 
   return (
     <>
-      <Box onClick={handleOpen} width={1} sx={{ cursor: 'pointer' }}>
+      <Button
+        onClick={handleOpen}
+        fullWidth
+        variant='contained'
+        // TODO: replace any
+        color={(eventInfo.backgroundColor as any) || 'primary'}
+        size='small'
+        sx={{
+          textTransform: 'none',
+          justifyContent: 'flex-start',
+          mx: 1,
+          px: 2,
+          py: 0.5,
+          borderRadius: 4,
+        }}
+      >
         <b>{eventInfo.timeText}</b>&nbsp;
         <i>{eventInfo.event.title}</i>
-      </Box>
+      </Button>
 
       <TaskModal open={open} onClose={handleClose} task={task} />
     </>

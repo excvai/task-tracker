@@ -1,6 +1,8 @@
 import { Category, Task, categories, tasks } from '@/data/tasks';
 import AddIcon from '@mui/icons-material/Add';
+import DoneIcon from '@mui/icons-material/Done';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
@@ -134,6 +136,10 @@ const Card = ({ task }: { task: Task }) => {
     <>
       <Box
         onClick={handleOpen}
+        display='flex'
+        justifyContent='space-between'
+        alignItems='center'
+        gap={2}
         bgcolor='white'
         borderRadius={1}
         p={1}
@@ -145,7 +151,25 @@ const Card = ({ task }: { task: Task }) => {
           },
         }}
       >
-        {task.name}
+        <Typography>{task.name}</Typography>
+        <Box display='flex' alignItems='center' gap={0.5}>
+          <IconButton
+            size='small'
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <DoneIcon fontSize='small' />
+          </IconButton>
+          <IconButton
+            size='small'
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <RemoveCircleOutlineIcon fontSize='small' />
+          </IconButton>
+        </Box>
       </Box>
 
       <TaskModal open={open} onClose={handleClose} task={task} />

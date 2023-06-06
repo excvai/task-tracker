@@ -25,7 +25,10 @@ export interface Task {
     [cId: number]: Status;
   };
   days: {
-    [day: string]: Status;
+    [day: string]: {
+      status: Status;
+      time: string;
+    };
   };
 }
 
@@ -40,7 +43,14 @@ export const tasks: Task[] = [
       2: 'failed',
     },
     days: {
-      '06/05/2023': 'completed',
+      '06/05/2023': {
+        status: 'completed',
+        time: '18:30',
+      },
+      '06/08/2023': {
+        status: 'failed',
+        time: '14:25',
+      },
     },
   },
   {
@@ -52,8 +62,14 @@ export const tasks: Task[] = [
       2: 'completed',
     },
     days: {
-      '06/05/2023': 'completed',
-      '06/07/2023': 'none',
+      '06/05/2023': {
+        status: 'completed',
+        time: '07:15',
+      },
+      '06/07/2023': {
+        status: 'none',
+        time: '13:20',
+      },
     },
   },
 ];

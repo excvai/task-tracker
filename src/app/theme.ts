@@ -8,10 +8,12 @@ declare module '@mui/material/styles' {
 
   interface Palette {
     neutral: Palette['primary'];
+    light: Palette['primary'];
   }
 
   interface PaletteOptions {
     neutral: PaletteOptions['primary'];
+    light: PaletteOptions['primary'];
   }
 
   interface PaletteColor {}
@@ -22,6 +24,7 @@ declare module '@mui/material/styles' {
 declare module '@mui/material' {
   interface ButtonPropsColorOverrides {
     neutral: true;
+    light: true;
   }
 }
 
@@ -70,6 +73,12 @@ export const theme = createTheme({
       // contrastText: '#fff',
       main: '#091E4224',
       contrastText: '#172B4D',
+    },
+    light: {
+      // main: '#fff',
+      main: 'hsl(0, 0%, 90%)',
+      dark: 'hsl(0, 0%, 80%)',
+      contrastText: 'rgba(0, 0, 0, 0.87)',
     },
   },
 });

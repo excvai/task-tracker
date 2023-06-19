@@ -1,4 +1,9 @@
-import { $user, updateUser } from '@/store/auth';
+import {
+  $user,
+  calculateExpPercentage,
+  calculateLvl,
+  updateUser,
+} from '@/store/auth';
 import EmojiEventsTwoToneIcon from '@mui/icons-material/EmojiEventsTwoTone';
 import HistoryIcon from '@mui/icons-material/History';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
@@ -19,7 +24,8 @@ import { StarIcon } from '@/icons/common';
 export const Sidebar = () => {
   const user = useStore($user)!;
 
-  const experience = 76.5;
+  const lvl = calculateLvl();
+  const expPercentage = calculateExpPercentage();
 
   return (
     <Stack
@@ -56,12 +62,12 @@ export const Sidebar = () => {
         >
           <StarIcon fontSize='small' />
           <Typography variant='body2' fontStyle='italic' fontWeight={400}>
-            3 lvl
+            {lvl} lvl
           </Typography>
         </Box>
         <Box mt={0.5}>
           <Typography variant='body2' fontStyle='italic' fontWeight={300}>
-            {experience}%
+            {calculateExpPercentage()}%
           </Typography>
           <Box
             position='relative'
@@ -80,7 +86,7 @@ export const Sidebar = () => {
             />
             <Box
               bgcolor={green[800]}
-              width={experience + '%'}
+              width={calculateExpPercentage() + '%'}
               position='absolute'
               top={0}
               bottom={0}
@@ -101,11 +107,7 @@ export const Sidebar = () => {
           },
         }}
       >
-        <Button
-          variant='contained'
-          color='light'
-          fullWidth
-        >
+        <Button variant='contained' color='light' fullWidth>
           <HistoryIcon /> <Typography ml={1}>Check history</Typography>
         </Button>
         <Button
@@ -164,12 +166,7 @@ export const Sidebar = () => {
                 <Typography variant='h6' fontWeight={600}>
                   Perfect Day
                 </Typography>
-                <Typography>
-                  Completed all active Dailies in one day. With this achievement
-                  you get a +level/2 buff to all Stats for the next day. Levels
-                  greater than 100 don&apos;t have any additional effects on
-                  buffs.
-                </Typography>
+                <Typography>Completed all Dailies in one day.</Typography>
               </Box>
             }
           >

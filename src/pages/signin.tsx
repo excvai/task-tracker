@@ -1,5 +1,4 @@
-import { users } from '@/data/users';
-import { updateUser } from '@/store/auth';
+import { updateUser, users } from '@/store/auth';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { Alert, Divider, Stack } from '@mui/material';
 import Avatar from '@mui/material/Avatar';

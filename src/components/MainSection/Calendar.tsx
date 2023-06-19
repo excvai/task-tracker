@@ -1,12 +1,16 @@
-import { Status, tasks } from '@/data/tasks';
-import { EventContentArg, EventInput } from '@fullcalendar/core';
+import { $tasks, Status, Task, addTask, updateTask } from '@/store/tasks';
+import { DateSelectArg, EventContentArg, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import FullCalendar from '@fullcalendar/react';
 import { Box, Button } from '@mui/material';
+import { useStore } from 'effector-react';
 import { useMemo, useState } from 'react';
 import { TaskModal } from '../TaskModal';
 
 export const Calendar = () => {
+  const tasks = useStore($tasks);
+
   const events = useMemo(() => {
     const out: EventInput[] = [];
     tasks.forEach((task) => {
@@ -19,13 +23,103 @@ export const Calendar = () => {
 
         out.push({
           title: task.name,
-          start: new Date(date + '/' + info.time),
+          start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
           backgroundColor: bgColor[info.status],
+          allDay: !Boolean(info.time),
         });
       });
     });
     return out;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getNextTaskId = () => {
+    let id = 1;
+    tasks.forEach((t) => {
+      if (t.id >= id) {
+        id = t.id + 1;
+      }
+    });
+    return id;
+  };
+
+  const handleDateSelect = (selectInfo: DateSelectArg) => {
+    let title = prompt('Please enter a name and time for your task');
+    let calendarApi = selectInfo.view.calendar;
+
+    calendarApi.unselect(); // clear date selection
+
+    if (!title) return;
+
+    const getDays = (start: Date, end: Date) => {
+      for (
+        var arr = [], dt = new Date(start);
+        dt <= new Date(end);
+        dt.setDate(dt.getDate() + 1)
+      ) {
+        arr.push(new Date(dt));
+      }
+      return arr;
+    };
+
+    const daysRange = getDays(selectInfo.start, selectInfo.end)
+      .slice(1)
+      .map((date) => date.toISOString().split('T')[0]);
+
+    let newDays: Task['days'] = {};
+    // Check if task already exist
+    let task = tasks.find((t) => t.name === title);
+
+    // If it exists then just update array of days
+    if (task) {
+      daysRange.forEach((day) => {
+        if (task!.days[day]) return;
+        const newDay: { status: Status; time: string | null } = {
+          status: 'none',
+          time: null,
+        };
+        task!.days[day] = newDay;
+        newDays[day] = newDay;
+      });
+      updateTask(task);
+    }
+    // Else add new task
+    else {
+      const days: Task['days'] = {};
+      daysRange.forEach((day) => {
+        days[day] = {
+          status: 'none',
+          time: null,
+        };
+      });
+      newDays = days;
+
+      const newTask = {
+        id: getNextTaskId(),
+        name: title,
+        description: '',
+        difficulty: null,
+        days,
+        categories: {},
+      };
+      addTask(newTask);
+      task = newTask;
+    }
+
+    const bgColor: { [k in Status]: string } = {
+      none: 'light',
+      failed: 'error',
+      completed: 'success',
+    };
+    Object.entries(newDays).forEach(([date, info]) => {
+      calendarApi.addEvent({
+        title: task!.name,
+        start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+        backgroundColor: bgColor[info.status],
+        allDay: !Boolean(info.time),
+      });
+    });
+  };
 
   return (
     <Box
@@ -35,14 +129,28 @@ export const Calendar = () => {
       sx={{
         backgroundImage:
           'radial-gradient(circle at 24.1% 68.8%, rgb(50, 50, 50) 0%, rgba(0, 0, 0, 50%) 99.4%);',
+        '.fc-event': {
+          bgcolor: 'transparent',
+          border: 'none',
+          padding: 0,
+        },
+        '.fc-event-main': {
+          display: 'flex',
+        },
+        '.fc-daygrid-event-harness': {
+          pt: 1,
+        },
       }}
     >
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
         events={events}
         fixedWeekCount={false}
         eventContent={renderEventContent}
+        selectable={true}
+        selectMirror={true}
+        select={handleDateSelect}
         height={'100%'}
       />
     </Box>
@@ -54,6 +162,8 @@ const renderEventContent = (eventInfo: EventContentArg) => (
 );
 
 const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
+  const tasks = useStore($tasks);
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -86,7 +196,61 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
         <i>{eventInfo.event.title}</i>
       </Button>
 
-      <TaskModal open={open} onClose={handleClose} task={task} />
+      <TaskModal
+        open={open}
+        onClose={handleClose}
+        task={task}
+        onComplete={() => {
+          const day = eventInfo.event.startStr.split('T')[0];
+          task.days[day].status = 'completed';
+          updateTask(task);
+
+          eventInfo.view.calendar.removeAllEvents();
+          const newEvents: EventInput[] = [];
+          tasks.forEach((task) => {
+            Object.entries(task.days).forEach(([date, info]) => {
+              const bgColor: { [k in Status]: string } = {
+                none: 'light',
+                failed: 'error',
+                completed: 'success',
+              };
+
+              newEvents.push({
+                title: task.name,
+                start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+                backgroundColor: bgColor[info.status],
+                allDay: !Boolean(info.time),
+              });
+            });
+          });
+          eventInfo.view.calendar.addEventSource(newEvents);
+        }}
+        onCancel={() => {
+          const day = eventInfo.event.startStr.split('T')[0];
+          task.days[day].status = 'failed';
+          updateTask(task);
+
+          eventInfo.view.calendar.removeAllEvents();
+          const newEvents: EventInput[] = [];
+          tasks.forEach((task) => {
+            Object.entries(task.days).forEach(([date, info]) => {
+              const bgColor: { [k in Status]: string } = {
+                none: 'light',
+                failed: 'error',
+                completed: 'success',
+              };
+
+              newEvents.push({
+                title: task.name,
+                start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+                backgroundColor: bgColor[info.status],
+                allDay: !Boolean(info.time),
+              });
+            });
+          });
+          eventInfo.view.calendar.addEventSource(newEvents);
+        }}
+      />
     </>
   );
 };

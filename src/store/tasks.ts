@@ -1,3 +1,5 @@
+import { createEvent, createStore } from 'effector';
+
 export type Status = 'none' | 'completed' | 'failed';
 
 export interface Category {
@@ -5,7 +7,7 @@ export interface Category {
   name: string;
 }
 
-export const categories: Category[] = [
+export const $categories = createStore<Category[]>([
   {
     id: 1,
     name: 'University',
@@ -14,25 +16,25 @@ export const categories: Category[] = [
     id: 2,
     name: 'Work',
   },
-];
+]);
 
 export interface Task {
   id: number;
   name: string;
   description: string;
-  difficulty: null | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
+  difficulty: null | number;
   categories: {
     [cId: number]: Status;
   };
   days: {
     [day: string]: {
       status: Status;
-      time: string;
+      time: string | null;
     };
   };
 }
 
-export const tasks: Task[] = [
+export const $tasks = createStore<Task[]>([
   {
     id: 1,
     name: 'Task 1',
@@ -43,11 +45,11 @@ export const tasks: Task[] = [
       2: 'failed',
     },
     days: {
-      '06/05/2023': {
+      '2023-06-05': {
         status: 'completed',
         time: '18:30',
       },
-      '06/08/2023': {
+      '2023-06-08': {
         status: 'failed',
         time: '14:25',
       },
@@ -62,14 +64,22 @@ export const tasks: Task[] = [
       2: 'completed',
     },
     days: {
-      '06/05/2023': {
+      '2023-06-05': {
         status: 'completed',
         time: '07:15',
       },
-      '06/07/2023': {
+      '2023-06-07': {
         status: 'none',
         time: '13:20',
       },
     },
   },
-];
+]);
+
+export const addTask = createEvent<Task>();
+$tasks.on(addTask, (tasks, newTask) => [...tasks, newTask]);
+
+export const updateTask = createEvent<Task>();
+$tasks.on(updateTask, (tasks, updatedTask) =>
+  tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
+);

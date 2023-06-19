@@ -1,4 +1,4 @@
-import { Task, categories } from '@/data/tasks';
+import { $categories, Task, updateTask } from '@/store/tasks';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
@@ -19,12 +19,26 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { useStore } from 'effector-react';
 
 interface TaskModalProps extends Omit<ModalProps, 'children'> {
   task: Task;
+  onComplete: () => void;
+  onCancel: () => void;
 }
 
-export const TaskModal = ({ task, ...props }: TaskModalProps) => {
+export const TaskModal = ({
+  task,
+  onComplete,
+  onCancel,
+  ...props
+}: TaskModalProps) => {
+  const categories = useStore($categories);
+
   return (
     <Modal {...props}>
       <Stack
@@ -112,7 +126,11 @@ export const TaskModal = ({ task, ...props }: TaskModalProps) => {
             </Box>
             <Rating
               name='difficulty'
-              defaultValue={task.difficulty || undefined}
+              value={task.difficulty}
+              onChange={(_, newValue) => {
+                task.difficulty = newValue;
+                updateTask(task);
+              }}
               precision={0.5}
               sx={{ mt: 1 }}
             />
@@ -155,8 +173,13 @@ export const TaskModal = ({ task, ...props }: TaskModalProps) => {
           </Box>
         </Stack>
 
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker label='Time' />
+        </LocalizationProvider>
+
         <Box display='flex' gap={2} width={1}>
           <Button
+            onClick={onComplete}
             color='success'
             fullWidth
             sx={{
@@ -169,6 +192,7 @@ export const TaskModal = ({ task, ...props }: TaskModalProps) => {
             Mark as completed
           </Button>
           <Button
+            onClick={onCancel}
             color='error'
             fullWidth
             sx={{
@@ -178,7 +202,7 @@ export const TaskModal = ({ task, ...props }: TaskModalProps) => {
             }}
           >
             <DeleteOutlinedIcon />
-            Delete this Task
+            Mark as failed
           </Button>
         </Box>
       </Stack>

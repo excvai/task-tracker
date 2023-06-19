@@ -1,4 +1,3 @@
-import { Category, Task, categories, tasks } from '@/data/tasks';
 import AddIcon from '@mui/icons-material/Add';
 import DoneIcon from '@mui/icons-material/Done';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
@@ -7,8 +6,20 @@ import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { useState } from 'react';
 import { TaskModal } from '../TaskModal';
+import { useStore } from 'effector-react';
+import {
+  $categories,
+  $tasks,
+  Category,
+  Status,
+  Task,
+  updateTask,
+} from '@/store/tasks';
 
 export const Categories = () => {
+  const categories = useStore($categories);
+  const tasks = useStore($tasks);
+
   return (
     <Stack
       direction='row'
@@ -96,7 +107,7 @@ const Category = ({
 
       <Stack gap={1}>
         {tasks.map((task) => (
-          <Card key={task.id} task={task} />
+          <Card key={task.id} task={task} category={category} />
         ))}
       </Stack>
 
@@ -123,13 +134,32 @@ const Category = ({
   );
 };
 
-const Card = ({ task }: { task: Task }) => {
+const Card = ({ task, category }: { task: Task; category: Category }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const bgColorMap: { [k in Status]: string | null } = {
+    none: null,
+    failed: 'error',
+    completed: 'success',
+  };
+  const bgColor = bgColorMap[task.categories[category.id]];
+
+  const completeTask = () => {
+    task.categories[category.id] = 'completed';
+    updateTask(task);
+    handleClose();
+  };
+
+  const cancelTask = () => {
+    task.categories[category.id] = 'failed';
+    updateTask(task);
+    handleClose();
   };
 
   return (
@@ -141,6 +171,8 @@ const Card = ({ task }: { task: Task }) => {
         alignItems='center'
         gap={2}
         bgcolor='white'
+        borderLeft={`5px solid`}
+        borderColor={bgColor ? bgColor + '.main' : 'white'}
         borderRadius={1}
         p={1}
         sx={{
@@ -157,6 +189,7 @@ const Card = ({ task }: { task: Task }) => {
             size='small'
             onClick={(e) => {
               e.stopPropagation();
+              completeTask();
             }}
           >
             <DoneIcon fontSize='small' />
@@ -165,6 +198,7 @@ const Card = ({ task }: { task: Task }) => {
             size='small'
             onClick={(e) => {
               e.stopPropagation();
+              cancelTask();
             }}
           >
             <RemoveCircleOutlineIcon fontSize='small' />
@@ -172,7 +206,13 @@ const Card = ({ task }: { task: Task }) => {
         </Box>
       </Box>
 
-      <TaskModal open={open} onClose={handleClose} task={task} />
+      <TaskModal
+        open={open}
+        onClose={handleClose}
+        task={task}
+        onComplete={completeTask}
+        onCancel={cancelTask}
+      />
     </>
   );
 };

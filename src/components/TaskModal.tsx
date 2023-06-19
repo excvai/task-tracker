@@ -1,4 +1,5 @@
 import { $categories, Task, updateTask } from '@/store/tasks';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
@@ -19,7 +20,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -27,12 +27,14 @@ import { useStore } from 'effector-react';
 
 interface TaskModalProps extends Omit<ModalProps, 'children'> {
   task: Task;
+  day: string;
   onComplete: () => void;
   onCancel: () => void;
 }
 
 export const TaskModal = ({
   task,
+  day,
   onComplete,
   onCancel,
   ...props
@@ -77,7 +79,14 @@ export const TaskModal = ({
         </IconButton>
 
         {/* Name */}
-        <Stack direction='row' gap={1} pr={5} py={1}>
+        <Stack
+          direction='row'
+          gap={1}
+          pr={5}
+          py={1}
+          alignItems='center'
+          width={1}
+        >
           {/* <AssignmentIcon sx={{ mt: '4px' }} /> */}
           <Typography
             id='modal-modal-title'
@@ -87,6 +96,21 @@ export const TaskModal = ({
           >
             {task.name}
           </Typography>
+
+          <Box
+            display='flex'
+            alignItems='center'
+            gap={1}
+            mx='auto'
+            borderBottom='2px solid'
+            borderColor='text.primary'
+            px={1}
+          >
+            <AccessTimeIcon />
+            <Typography variant='h6' fontWeight={300} component='h2'>
+              {task.days[day].time}
+            </Typography>
+          </Box>
         </Stack>
 
         {/* Description */}
@@ -173,9 +197,9 @@ export const TaskModal = ({
           </Box>
         </Stack>
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker label='Time' />
-        </LocalizationProvider>
+        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+        {/*   <TimePicker label='Time' /> */}
+        {/* </LocalizationProvider> */}
 
         <Box display='flex' gap={2} width={1}>
           <Button

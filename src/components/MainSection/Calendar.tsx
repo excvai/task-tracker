@@ -173,6 +173,7 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
   };
 
   const task = tasks.find((t) => t.name === eventInfo.event.title)!;
+  const day = eventInfo.event.startStr.split('T')[0];
 
   return (
     <>
@@ -200,8 +201,8 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
         open={open}
         onClose={handleClose}
         task={task}
+        day={day}
         onComplete={() => {
-          const day = eventInfo.event.startStr.split('T')[0];
           task.days[day].status = 'completed';
           updateTask(task);
 
@@ -226,7 +227,6 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
           eventInfo.view.calendar.addEventSource(newEvents);
         }}
         onCancel={() => {
-          const day = eventInfo.event.startStr.split('T')[0];
           task.days[day].status = 'failed';
           updateTask(task);
 

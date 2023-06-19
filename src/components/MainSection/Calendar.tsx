@@ -23,15 +23,15 @@ export const Calendar = () => {
 
         out.push({
           title: task.name,
-          start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+          start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
           backgroundColor: bgColor[info.status],
           allDay: !Boolean(info.time),
         });
       });
     });
     return out;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [tasks]);
+  console.log(tasks);
 
   const getNextTaskId = () => {
     let id = 1;
@@ -51,6 +51,10 @@ export const Calendar = () => {
 
     if (!title) return;
 
+    let [name, time] = title.split('(');
+    name = name.trim();
+    time = time?.slice(0, -1);
+
     const getDays = (start: Date, end: Date) => {
       for (
         var arr = [], dt = new Date(start);
@@ -68,7 +72,7 @@ export const Calendar = () => {
 
     let newDays: Task['days'] = {};
     // Check if task already exist
-    let task = tasks.find((t) => t.name === title);
+    let task = tasks.find((t) => t.name === name);
 
     // If it exists then just update array of days
     if (task) {
@@ -76,7 +80,7 @@ export const Calendar = () => {
         if (task!.days[day]) return;
         const newDay: { status: Status; time: string | null } = {
           status: 'none',
-          time: null,
+          time: time || null,
         };
         task!.days[day] = newDay;
         newDays[day] = newDay;
@@ -89,14 +93,14 @@ export const Calendar = () => {
       daysRange.forEach((day) => {
         days[day] = {
           status: 'none',
-          time: null,
+          time: time || null,
         };
       });
       newDays = days;
 
       const newTask = {
         id: getNextTaskId(),
-        name: title,
+        name: name,
         description: '',
         difficulty: null,
         days,
@@ -105,20 +109,6 @@ export const Calendar = () => {
       addTask(newTask);
       task = newTask;
     }
-
-    const bgColor: { [k in Status]: string } = {
-      none: 'light',
-      failed: 'error',
-      completed: 'success',
-    };
-    Object.entries(newDays).forEach(([date, info]) => {
-      calendarApi.addEvent({
-        title: task!.name,
-        start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
-        backgroundColor: bgColor[info.status],
-        allDay: !Boolean(info.time),
-      });
-    });
   };
 
   return (
@@ -206,7 +196,6 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
           task.days[day].status = 'completed';
           updateTask(task);
 
-          eventInfo.view.calendar.removeAllEvents();
           const newEvents: EventInput[] = [];
           tasks.forEach((task) => {
             Object.entries(task.days).forEach(([date, info]) => {
@@ -218,19 +207,17 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
 
               newEvents.push({
                 title: task.name,
-                start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+                start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
                 backgroundColor: bgColor[info.status],
                 allDay: !Boolean(info.time),
               });
             });
           });
-          eventInfo.view.calendar.addEventSource(newEvents);
         }}
         onCancel={() => {
           task.days[day].status = 'failed';
           updateTask(task);
 
-          eventInfo.view.calendar.removeAllEvents();
           const newEvents: EventInput[] = [];
           tasks.forEach((task) => {
             Object.entries(task.days).forEach(([date, info]) => {
@@ -242,13 +229,12 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
 
               newEvents.push({
                 title: task.name,
-                start: new Date(`${date}${info.time ? ' ' + info.time : ''}`),
+                start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
                 backgroundColor: bgColor[info.status],
                 allDay: !Boolean(info.time),
               });
             });
           });
-          eventInfo.view.calendar.addEventSource(newEvents);
         }}
       />
     </>

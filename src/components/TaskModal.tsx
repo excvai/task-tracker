@@ -1,5 +1,4 @@
 import { $categories, Task, updateTask } from '@/store/tasks';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteOutlinedIcon from '@mui/icons-material/DeleteOutlined';
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
@@ -23,7 +22,9 @@ import {
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import dayjs from 'dayjs';
 import { useStore } from 'effector-react';
+import { useState } from 'react';
 
 interface TaskModalProps extends Omit<ModalProps, 'children'> {
   task: Task;
@@ -40,6 +41,10 @@ export const TaskModal = ({
   ...props
 }: TaskModalProps) => {
   const categories = useStore($categories);
+
+  const [time, setTime] = useState<dayjs.Dayjs | null>(
+    dayjs(day + 'T' + task.days[day].time)
+  );
 
   return (
     <Modal {...props}>
@@ -96,21 +101,6 @@ export const TaskModal = ({
           >
             {task.name}
           </Typography>
-
-          <Box
-            display='flex'
-            alignItems='center'
-            gap={1}
-            mx='auto'
-            borderBottom='2px solid'
-            borderColor='text.primary'
-            px={1}
-          >
-            <AccessTimeIcon />
-            <Typography variant='h6' fontWeight={300} component='h2'>
-              {task.days[day].time}
-            </Typography>
-          </Box>
         </Stack>
 
         {/* Description */}
@@ -135,6 +125,23 @@ export const TaskModal = ({
             </Typography>
           </Box>
         </Stack>
+
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <TimePicker
+            label='Time'
+            slotProps={{ textField: { size: 'small' } }}
+            value={time}
+            onChange={(value) => setTime(value)}
+            onAccept={(value) => {
+              const zeroPad = (num: number, places: number) =>
+                String(num).padStart(places, '0');
+              const time =
+                zeroPad(value?.hour()!, 2) + ':' + zeroPad(value?.minute()!, 2);
+              task.days[day].time = time;
+              updateTask(task);
+            }}
+          />
+        </LocalizationProvider>
 
         {/* Complexity */}
         <Stack direction='row' gap={1}>
@@ -196,10 +203,6 @@ export const TaskModal = ({
             </Grid>
           </Box>
         </Stack>
-
-        {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
-        {/*   <TimePicker label='Time' /> */}
-        {/* </LocalizationProvider> */}
 
         <Box display='flex' gap={2} width={1}>
           <Button

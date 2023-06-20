@@ -13,18 +13,26 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  console.log(req.body);
   const chatId = req.body.message.chat.id;
+  const userMessage = req.body.message.text;
 
-  if (req.body.message.text === '/start') {
+  if (userMessage === '/start') {
     const message =
       'Welcome to <i>NextJS News Channel</i> <b>' +
       req.body.message.from.first_name +
       '</b>.%0ATo get a list of commands sends /help';
     await sendMessage(chatId, message);
   }
-  if (req.body.message.text === '/help') {
+
+  if (userMessage === '/help') {
     const message =
       'Help for <i>NextJS News Channel</i>.%0AUse /search <i>keyword</i> to search for <i>keyword</i> in my Medium publication';
+    await sendMessage(chatId, message);
+  }
+
+  if (userMessage === '/new-task') {
+    const message = 'New task was added!';
     await sendMessage(chatId, message);
   }
 

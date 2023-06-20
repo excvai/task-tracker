@@ -28,7 +28,6 @@ const calculateExp = (tasks: Task[]) => {
       exp += 12 * (t.difficulty || 0.5);
     });
   });
-  console.log(exp);
   return exp;
 };
 

@@ -64,10 +64,6 @@ export default function SignIn() {
     } else {
       setError('User not found');
     }
-    console.log({
-      email,
-      password,
-    });
   };
 
   return (

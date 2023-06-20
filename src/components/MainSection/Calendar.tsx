@@ -31,7 +31,6 @@ export const Calendar = () => {
     });
     return out;
   }, [tasks]);
-  console.log(tasks);
 
   const getNextTaskId = () => {
     let id = 1;

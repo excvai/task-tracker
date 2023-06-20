@@ -8,8 +8,17 @@ import { ThemeProvider } from '@mui/material/styles';
 import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { useEffect } from 'react';
 
 function App({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    const eventSource = new EventSource('/api/tlg?action=subscribe');
+
+    eventSource.onmessage = (message) => {
+      console.log(message.data);
+    };
+  }, []);
+
   return (
     <>
       <Head>

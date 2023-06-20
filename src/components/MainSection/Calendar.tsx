@@ -184,7 +184,10 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
         }}
       >
         <b>{eventInfo.timeText}</b>&nbsp;
-        <i>{eventInfo.event.title}</i>
+        <Box component='i' sx={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis'
+        }}>{eventInfo.event.title}</Box>
       </Button>
 
       <TaskModal

@@ -28,7 +28,7 @@ import { useState } from 'react';
 
 interface TaskModalProps extends Omit<ModalProps, 'children'> {
   task: Task;
-  day: string;
+  day?: string;
   onComplete: () => void;
   onCancel: () => void;
 }
@@ -43,7 +43,7 @@ export const TaskModal = ({
   const categories = useStore($categories);
 
   const [time, setTime] = useState<dayjs.Dayjs | null>(
-    dayjs(day + 'T' + task.days[day].time)
+    day ? dayjs(day + 'T' + task.days[day].time) : null
   );
 
   return (
@@ -126,22 +126,26 @@ export const TaskModal = ({
           </Box>
         </Stack>
 
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker
-            label='Time'
-            slotProps={{ textField: { size: 'small' } }}
-            value={time}
-            onChange={(value) => setTime(value)}
-            onAccept={(value) => {
-              const zeroPad = (num: number, places: number) =>
-                String(num).padStart(places, '0');
-              const time =
-                zeroPad(value?.hour()!, 2) + ':' + zeroPad(value?.minute()!, 2);
-              task.days[day].time = time;
-              updateTask(task);
-            }}
-          />
-        </LocalizationProvider>
+        {day && (
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <TimePicker
+              label='Time'
+              slotProps={{ textField: { size: 'small' } }}
+              value={time}
+              onChange={(value) => setTime(value)}
+              onAccept={(value) => {
+                const zeroPad = (num: number, places: number) =>
+                  String(num).padStart(places, '0');
+                const time =
+                  zeroPad(value?.hour()!, 2) +
+                  ':' +
+                  zeroPad(value?.minute()!, 2);
+                task.days[day].time = time;
+                updateTask(task);
+              }}
+            />
+          </LocalizationProvider>
+        )}
 
         {/* Complexity */}
         <Stack direction='row' gap={1}>

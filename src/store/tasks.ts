@@ -59,7 +59,7 @@ export const $tasks = createStore<Task[]>([
     id: 2,
     name: 'Task 2',
     description: 'Super ultra important second task!!!',
-    difficulty: null,
+    difficulty: 1,
     categories: {
       2: 'completed',
     },
@@ -83,3 +83,6 @@ export const updateTask = createEvent<Task>();
 $tasks.on(updateTask, (tasks, updatedTask) =>
   tasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
 );
+
+export const deleteTask = createEvent<number>();
+$tasks.on(deleteTask, (tasks, taskId) => tasks.filter((t) => t.id !== taskId));

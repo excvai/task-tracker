@@ -183,62 +183,69 @@ const MyComponent = ({ eventInfo }: { eventInfo: EventContentArg }) => {
         }}
       >
         <b>{eventInfo.timeText}</b>&nbsp;
-        <Box component='i' sx={{
-          overflow: 'hidden',
-          textOverflow: 'ellipsis'
-        }}>{eventInfo.event.title}</Box>
+        <Box
+          component='i'
+          sx={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {eventInfo.event.title}
+        </Box>
       </Button>
 
-      <TaskModal
-        open={open}
-        onClose={handleClose}
-        task={task}
-        day={day}
-        onComplete={() => {
-          task.days[day].status = 'completed';
-          updateTask(task);
+      {task && (
+        <TaskModal
+          open={open}
+          onClose={handleClose}
+          task={task}
+          day={day}
+          onComplete={() => {
+            task.days[day].status = 'completed';
+            updateTask(task);
 
-          const newEvents: EventInput[] = [];
-          tasks.forEach((task) => {
-            Object.entries(task.days).forEach(([date, info]) => {
-              const bgColor: { [k in Status]: string } = {
-                none: 'light',
-                failed: 'error',
-                completed: 'success',
-              };
+            const newEvents: EventInput[] = [];
+            tasks.forEach((task) => {
+              Object.entries(task.days).forEach(([date, info]) => {
+                const bgColor: { [k in Status]: string } = {
+                  none: 'light',
+                  failed: 'error',
+                  completed: 'success',
+                };
 
-              newEvents.push({
-                title: task.name,
-                start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
-                backgroundColor: bgColor[info.status],
-                allDay: !Boolean(info.time),
+                newEvents.push({
+                  title: task.name,
+                  start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
+                  backgroundColor: bgColor[info.status],
+                  allDay: !Boolean(info.time),
+                });
               });
             });
-          });
-        }}
-        onCancel={() => {
-          task.days[day].status = 'failed';
-          updateTask(task);
+          }}
+          onCancel={() => {
+            task.days[day].status = 'failed';
+            updateTask(task);
 
-          const newEvents: EventInput[] = [];
-          tasks.forEach((task) => {
-            Object.entries(task.days).forEach(([date, info]) => {
-              const bgColor: { [k in Status]: string } = {
-                none: 'light',
-                failed: 'error',
-                completed: 'success',
-              };
+            const newEvents: EventInput[] = [];
+            tasks.forEach((task) => {
+              Object.entries(task.days).forEach(([date, info]) => {
+                const bgColor: { [k in Status]: string } = {
+                  none: 'light',
+                  failed: 'error',
+                  completed: 'success',
+                };
 
-              newEvents.push({
-                title: task.name,
-                start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
-                backgroundColor: bgColor[info.status],
-                allDay: !Boolean(info.time),
+                newEvents.push({
+                  title: task.name,
+                  start: new Date(`${date}${info.time ? 'T' + info.time : ''}`),
+                  backgroundColor: bgColor[info.status],
+                  allDay: !Boolean(info.time),
+                });
               });
             });
-          });
-        }}
-      />
+          }}
+        />
+      )}
     </>
   );
 };

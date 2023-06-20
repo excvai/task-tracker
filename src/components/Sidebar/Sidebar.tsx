@@ -20,6 +20,7 @@ import PerfectAchievement from '/public/images/achievement-perfect2x.png';
 import UnearnedAchievement from '/public/images/achievement-unearned2x.png';
 import DefaultAvatar from '/public/images/avatar.jpg';
 import { StarIcon } from '@/icons/common';
+import { hashCode } from '@/utils';
 
 export const Sidebar = () => {
   const user = useStore($user)!;
@@ -112,7 +113,7 @@ export const Sidebar = () => {
         </Button>
         <Button
           component={NextLink}
-          href='https://t.me/GoalifyBot'
+          href={`https://t.me/GoalifyBot?code=${hashCode(user.email)}`}
           target='_blank'
           variant='contained'
           color='light'

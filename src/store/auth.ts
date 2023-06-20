@@ -1,5 +1,5 @@
 import { createEvent, createStore } from 'effector';
-import { $tasks, Task, updateTask } from './tasks';
+import { $tasks, Task, deleteTask, updateTask } from './tasks';
 
 interface Achievement {
   id: number;
@@ -65,7 +65,7 @@ export const $user = createStore<User | null>(users[0]).on(
 );
 
 // Recalculate user experience after task update
-$user.on(updateTask, (user) => {
+$user.on([updateTask, deleteTask], (user) => {
   return {
     ...user!,
     experience: calculateExp($tasks.getState()),

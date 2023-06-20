@@ -1,4 +1,6 @@
 import { theme } from '@/app/theme';
+import { addTask, deleteTask } from '@/store/tasks';
+import { Task } from '@/store/tasks';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -22,8 +24,14 @@ function App({ Component, pageProps }: AppProps) {
       console.log('SOCKET CONNECTED!', socket?.id);
     });
 
-    socket.on('newtask', (task: any) => {
-      console.log('New task was added:', task);
+    socket.on('new-task', (task: Task) => {
+      console.log('New task added:', task);
+      addTask(task);
+    });
+
+    socket.on('delete-task', (taskId: number) => {
+      console.log('Delete task:', taskId);
+      deleteTask(taskId);
     });
   }, []);
 

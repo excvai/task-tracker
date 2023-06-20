@@ -9,14 +9,22 @@ import { appWithTranslation } from 'next-i18next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useEffect } from 'react';
+import { Socket, io } from 'socket.io-client';
+
+let socket: Socket | null = null;
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
-    const eventSource = new EventSource('/api/tlg?action=subscribe');
+    const URL = 'http://localhost:8080';
+    socket = io(URL);
 
-    eventSource.onmessage = (message) => {
-      console.log(message.data);
-    };
+    socket.on('connect', () => {
+      console.log('SOCKET CONNECTED!', socket?.id);
+    });
+
+    socket.on('newtask', (task: any) => {
+      console.log('New task was added:', task);
+    });
   }, []);
 
   return (

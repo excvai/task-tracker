@@ -111,7 +111,7 @@ export const Sidebar = () => {
         <History />
         <Button
           component={NextLink}
-          href={`https://t.me/GoalifyBot?code=${hashCode(user.email)}`}
+          href={`https://t.me/GoalifyBot?start=${hashCode(user.email)}`}
           target='_blank'
           variant='contained'
           color='light'

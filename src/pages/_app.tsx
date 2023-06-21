@@ -17,6 +17,8 @@ let socket: Socket | null = null;
 
 function App({ Component, pageProps }: AppProps) {
   useEffect(() => {
+    if (socket) return;
+
     const URL = 'http://localhost:8080';
     socket = io(URL);
 

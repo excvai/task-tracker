@@ -106,8 +106,28 @@ export const $tasks = createStore<Task[]>([
         status: 'failed',
         time: null,
       },
+      '2023-05-05': {
+        status: 'completed',
+        time: '05:15',
+      },
+      '2023-05-08': {
+        status: 'completed',
+        time: '05:15',
+      },
+      '2023-05-14': {
+        status: 'completed',
+        time: '05:15',
+      },
+      '2023-05-19': {
+        status: 'completed',
+        time: '05:15',
+      },
+      '2023-05-18': {
+        status: 'completed',
+        time: '05:15',
+      },
       '2023-06-22': {
-        status: 'none',
+        status: 'completed',
         time: '05:15',
       },
       '2023-06-13': {

@@ -148,17 +148,28 @@ export const Sidebar = () => {
           <Typography variant='h6'>Achievements</Typography>
         </Box>
         <Grid container rowSpacing={2}>
-          <Grid
-            item
-            xs={6}
-            display='flex'
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='center'
+          <Tooltip
+            title={
+              <Box textAlign='center' py={2} px={1}>
+                <Typography variant='h6' fontWeight={600}>
+                  Consistent
+                </Typography>
+                <Typography>Completed the task 25 times in a row</Typography>
+              </Box>
+            }
           >
-            <Image src={UnearnedAchievement} alt='Unearned' />
-            <Typography>0 Streak</Typography>
-          </Grid>
+            <Grid
+              item
+              xs={6}
+              display='flex'
+              flexDirection='column'
+              justifyContent='center'
+              alignItems='center'
+            >
+              <Image src={UnearnedAchievement} alt='Unearned' />
+              <Typography>Consistent</Typography>
+            </Grid>
+          </Tooltip>
           <Tooltip
             title={
               <Box textAlign='center' py={2} px={1}>
@@ -225,17 +236,31 @@ export const Sidebar = () => {
               <Typography>Complete Task</Typography>
             </Grid>
           </Tooltip>
-          <Grid
-            item
-            xs={6}
-            display='flex'
-            flexDirection='column'
-            justifyContent='center'
-            alignItems='center'
+          <Tooltip
+            title={
+              <Box textAlign='center' py={2} px={1}>
+                <Typography variant='h6' fontWeight={600}>
+                  Contributor
+                </Typography>
+                <Typography>
+                  Has contributed to Goalify, whether via code, art, writing, or
+                  other methods.
+                </Typography>
+              </Box>
+            }
           >
-            <Image src={UnearnedAchievement} alt='Unearned' />
-            <Typography>Contributor</Typography>
-          </Grid>
+            <Grid
+              item
+              xs={6}
+              display='flex'
+              flexDirection='column'
+              justifyContent='center'
+              alignItems='center'
+            >
+              <Image src={UnearnedAchievement} alt='Unearned' />
+              <Typography>Contributor</Typography>
+            </Grid>
+          </Tooltip>
         </Grid>
       </Box>
 

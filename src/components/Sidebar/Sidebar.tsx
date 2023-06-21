@@ -21,12 +21,12 @@ import UnearnedAchievement from '/public/images/achievement-unearned2x.png';
 import DefaultAvatar from '/public/images/avatar.jpg';
 import { StarIcon } from '@/icons/common';
 import { hashCode } from '@/utils';
+import { History } from './HistoryModal';
 
 export const Sidebar = () => {
   const user = useStore($user)!;
 
   const lvl = calculateLvl();
-  const expPercentage = calculateExpPercentage();
 
   return (
     <Stack
@@ -108,9 +108,7 @@ export const Sidebar = () => {
           },
         }}
       >
-        <Button variant='contained' color='light' fullWidth>
-          <HistoryIcon /> <Typography ml={1}>Check history</Typography>
-        </Button>
+        <History />
         <Button
           component={NextLink}
           href={`https://t.me/GoalifyBot?code=${hashCode(user.email)}`}
